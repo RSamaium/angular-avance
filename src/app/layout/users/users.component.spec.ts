@@ -4,6 +4,9 @@ import { UsersComponent } from "./users.component"
 import { UserService } from 'src/app/core/services/user.service'
 import { Observable, of } from "rxjs"
 import { User } from "src/app/core/interfaces/user"
+import { UserCardComponent } from './user-card/user-card.component'
+import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { By } from '@angular/platform-browser'
 
 /*class UserServiceMock {
     getAll(): Observable<User[]> {
@@ -27,8 +30,9 @@ describe('Tester UsersComponent', () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [UsersComponent],
+            declarations: [UsersComponent, UserCardComponent],
             imports: [HttpClientTestingModule],
+            //schemas: [NO_ERRORS_SCHEMA]
             /*providers: [{
                 provide: UserService,
                 useClass: UserServiceMock
@@ -58,9 +62,13 @@ describe('Tester UsersComponent', () => {
 
         fixture.detectChanges() // mettre à jour les users
 
-        const cardsEl = tpl.querySelectorAll('.card')
+        const cardsEl = tpl.querySelectorAll('app-user-card')
         expect(component.users.length).toBeGreaterThan(0)
         expect(cardsEl.length).toBe(component.users.length)
+
+        /*const cardComponent = fixture.debugElement.query(By.directive(UserCardComponent))
+        cardComponent.componentInstance.user
+        */
     })
 
     afterEach(() => {
