@@ -1,8 +1,1 @@
-<article *ngFor="let user of users" class="card">
-    <header>
-        {{ user.name }}
-    </header>
-    <div>
-        {{ user.email }}
-    </div>
-</article>
+<app-user-card *ngFor="let u of users" [user]="u"></app-user-card>
