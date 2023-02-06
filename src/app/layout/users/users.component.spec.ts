@@ -1,11 +1,11 @@
-import { HttpClientModule } from "@angular/common/http"
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing'
 import { ComponentFixture, TestBed } from "@angular/core/testing"
 import { UsersComponent } from "./users.component"
 import { UserService } from 'src/app/core/services/user.service'
 import { Observable, of } from "rxjs"
 import { User } from "src/app/core/interfaces/user"
 
-class UserServiceMock {
+/*class UserServiceMock {
     getAll(): Observable<User[]> {
         return of([
             {
@@ -16,36 +16,54 @@ class UserServiceMock {
             }
         ])
     }
-}
+}*/
 
 describe('Tester UsersComponent', () => {
     let fixture: ComponentFixture<UsersComponent>
     let component: UsersComponent
     let tpl: HTMLElement
     let service: UserService
+    let httpMock: HttpTestingController
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
             declarations: [UsersComponent],
-            imports: [HttpClientModule],
-            providers: [{
+            imports: [HttpClientTestingModule],
+            /*providers: [{
                 provide: UserService,
                 useClass: UserServiceMock
-            }]
+            }]*/
         }).compileComponents()
 
         fixture = TestBed.createComponent(UsersComponent)
         service = TestBed.inject(UserService)
+        httpMock = TestBed.inject(HttpTestingController)
         fixture.detectChanges() // déclenche ngOnInit
         await fixture.whenStable()
-        fixture.detectChanges() // mettre à jour les users
         component = fixture.componentInstance
         tpl = fixture.nativeElement
     })
 
     it('Le template contient des utilisateurs', async () => {
+        const requestHttp = httpMock.expectOne(service.url)
+        expect(requestHttp.request.method).toBe('GET')
+        requestHttp.flush([
+            {
+                id: 1,
+                name: 'ana',
+                username: 'ana',
+                email: 'ana@gmail.com'
+            }
+        ])
+
+        fixture.detectChanges() // mettre à jour les users
+
         const cardsEl = tpl.querySelectorAll('.card')
         expect(component.users.length).toBeGreaterThan(0)
         expect(cardsEl.length).toBe(component.users.length)
+    })
+
+    afterEach(() => {
+        httpMock.verify()
     })
 })
