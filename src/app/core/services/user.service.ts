@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AbstractControl } from "@angular/forms";
-import { lastValueFrom, map, Observable } from "rxjs";
+import { BehaviorSubject, lastValueFrom, map, Observable } from "rxjs";
 import { User } from "../interfaces/user";
 
 @Injectable({
@@ -9,6 +9,17 @@ import { User } from "../interfaces/user";
 })
 export class UserService {
     readonly url: string = 'https://jsonplaceholder.typicode.com/users'
+    private _search$: BehaviorSubject<string> = new BehaviorSubject('')
+    
+    // readonly search$: Observable<string> = this._search$.asObservable()
+    get search$(): Observable<string> {
+        return this._search$.asObservable()
+    }
+
+
+    setSearch(str: string) {
+        this._search$.next(str)
+    }
 
     constructor(private http: HttpClient) {}
 
@@ -23,8 +34,13 @@ export class UserService {
             )
     }*/
 
-    checkEmail(input: AbstractControl): Promise<{ emailExists: boolean } | null> {
+    /*checkEmail(input: AbstractControl): Promise<{ emailExists: boolean } | null> {
         return lastValueFrom(this.http.get<User>(this.url + '/1'))
             .then(user => user.email === input.value ? { emailExists: true } : null)
+    }*/
+
+    async checkEmail(input: AbstractControl): Promise<{ emailExists: boolean } | null> {
+        const user = await lastValueFrom(this.http.get<User>(this.url + '/1'))
+        return user.email === input.value ? { emailExists: true } : null
     }
 }
