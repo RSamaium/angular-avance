@@ -14,7 +14,6 @@ import { InterceptorService } from './core/services/interceptor.service';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    LayoutModule,
     HttpClientModule,
     LoginComponent
   ],

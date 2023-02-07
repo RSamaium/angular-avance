@@ -2,6 +2,8 @@
     <ul>
         <li>
             <strong>{{ title$ | async }}</strong>
+            <strong>   {{ count }}</strong>
+            <strong>  {{ navbarConfig | json  }}</strong>
             <button (click)="changeTitle()">Modifier le titre</button>
         </li>
     </ul>
