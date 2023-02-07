@@ -1,1 +1,11 @@
+<form #form="ngForm" (ngSubmit)="createUser(form)">
+    <label>Nom</label>
+    <input type="text" name="name" ngModel>
+
+    <label>Email</label>
+    <input type="text" name="email" ngModel>
+
+    <button>Créer utilisateur</button>
+</form>
+
 <app-user-card *ngFor="let u of users$ | async" [user]="u"></app-user-card>

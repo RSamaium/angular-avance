@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core'
+import { NgForm } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/core/interfaces/user';
 import { UserService } from 'src/app/core/services/user.service';
@@ -17,5 +18,16 @@ export class UsersComponent implements OnInit {
       console.log(str)
     })
     this.userService.getAll().subscribe()
+  }
+
+  createUser(form: NgForm) {
+    this.userService.create(form.value).subscribe({
+      next: () => {
+        form.resetForm()
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
   }
 }

@@ -1,8 +1,11 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AbstractControl } from "@angular/forms";
-import { BehaviorSubject, lastValueFrom, map, Observable, tap } from "rxjs";
+import { BehaviorSubject, catchError, lastValueFrom, map, Observable, retry, tap, throwError } from "rxjs";
 import { User } from "../interfaces/user";
+import { NotificationService } from "./notification.service";
+
+type UserPayload = Omit<User, 'id'>
 
 @Injectable({
     providedIn: 'root'
@@ -22,7 +25,10 @@ export class UserService {
         this._search$.next(str)
     }
 
-    constructor(private http: HttpClient) {}
+    constructor(
+        private http: HttpClient,
+        private notification: NotificationService
+    ) {}
 
     getAll(): Observable<User[]> {
         return this.http.get<User[]>(this.url)
@@ -30,6 +36,22 @@ export class UserService {
                 tap((users) => {
                     //const listUsers = this._users$.value
                     this._users$.next(users)
+                })
+            )
+    }
+
+    create(payload: UserPayload): Observable<User> {
+        return this.http.post<User>(this.url + 'ddzdzzddeer', payload)
+            .pipe(
+                tap((user) => {
+                    const users = this._users$.value
+                    this._users$.next([ ...users, user ])
+                    this.notification.success('Utilisateur créé !')
+                }),
+                catchError((err: HttpErrorResponse) => {
+                    this.notification.error('Erreur:' + err.message)
+                    throw err
+                    //return throwError(() => err)
                 })
             )
     }
