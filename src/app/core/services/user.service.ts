@@ -41,7 +41,7 @@ export class UserService {
     }
 
     create(payload: UserPayload): Observable<User> {
-        return this.http.post<User>(this.url + 'ddzdzzddeer', payload)
+        return this.http.post<User>(this.url, payload)
             .pipe(
                 tap((user) => {
                     const users = this._users$.value
@@ -52,6 +52,21 @@ export class UserService {
                     this.notification.error('Erreur:' + err.message)
                     throw err
                     //return throwError(() => err)
+                })
+            )
+    }
+
+    delete(id: number): Observable<void> {
+        return this.http.delete<void>(this.url + '/' + id)
+            .pipe(
+                tap(() => {
+                    const users = this._users$.value.filter(user => user.id !== id)
+                    this._users$.next(users)
+                    this.notification.success('Utilisateur supprimé !')
+                }),
+                catchError((err: HttpErrorResponse) => {
+                    this.notification.error('Erreur:' + err.message)
+                    throw err
                 })
             )
     }

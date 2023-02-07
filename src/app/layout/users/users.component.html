@@ -8,4 +8,8 @@
     <button>Créer utilisateur</button>
 </form>
 
-<app-user-card *ngFor="let u of users$ | async" [user]="u"></app-user-card>
+<app-user-card 
+    *ngFor="let u of users$ | async" 
+    (onDelete)="deleteUser($event)"
+    [user]="u">
+</app-user-card>

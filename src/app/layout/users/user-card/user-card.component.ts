@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { User } from 'src/app/core/interfaces/user';
 
 @Component({
@@ -8,4 +8,9 @@ import { User } from 'src/app/core/interfaces/user';
 })
 export class UserCardComponent {
   @Input() user: User = {} as User
+  @Output() onDelete: EventEmitter<number> = new EventEmitter()
+
+  removeUser() {
+     this.onDelete.emit(this.user.id)
+  }
 }
