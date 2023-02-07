@@ -8,6 +8,9 @@
     <button>Créer utilisateur</button>
 </form>
 
+<app-color [(ngModel)]="color"></app-color>
+    {{ color }}
+
 <app-user-card 
     *ngFor="let u of users$ | async" 
     (onDelete)="deleteUser($event)"

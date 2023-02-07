@@ -10,6 +10,7 @@ import { UserService } from 'src/app/core/services/user.service';
 })
 export class UsersComponent implements OnInit {
   users$: Observable<User[]> = this.userService.users$
+  color: string = ''
 
   constructor(private userService: UserService) { }
 
