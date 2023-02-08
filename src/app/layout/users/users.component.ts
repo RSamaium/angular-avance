@@ -5,7 +5,7 @@ import { Observable } from 'rxjs';
 import { User } from 'src/app/core/interfaces/user';
 import { UserService } from 'src/app/core/services/user.service';
 import { IStore } from 'src/app/store/store';
-import { userCreate, userGetAll } from 'src/app/store/user/user.action';
+import { userCreate, userDelete, userGetAll } from 'src/app/store/user/user.action';
 import { selectUserGetAll } from 'src/app/store/user/user.selector';
 
 @Component({
@@ -13,7 +13,7 @@ import { selectUserGetAll } from 'src/app/store/user/user.selector';
   templateUrl: 'users.component.html'
 })
 export class UsersComponent implements OnInit {
-  users$: Observable<User[]> = this.store.select(selectUserGetAll)
+  users$: Observable<User[]> = this.userService.usersFiltered$
   color: string = ''
 
   constructor(
@@ -33,6 +33,6 @@ export class UsersComponent implements OnInit {
   }
 
   deleteUser(id: number) {
-    this.userService.delete(id).subscribe()
+    this.store.dispatch(userDelete({ id }))
   }
 }

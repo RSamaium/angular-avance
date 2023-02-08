@@ -4,6 +4,4 @@ const ob1$ = of(1, 2, 3)
 const ob2$ = of('A', 'B', 'C')
 
 
-const ob3$ = forkJoin([ ob1$, ob2$ ])
-
-ob3$.subscribe(console.log)
+const ob3$ = forkJoin([ob1$, ob2$])

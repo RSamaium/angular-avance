@@ -13,16 +13,16 @@ import { UserService } from '../core/services/user.service';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent {
-  /*propEmail: FormControl = new FormControl('', [
+  propEmail: FormControl = new FormControl('', [
     Validators.required
   ], [
     this.userService.checkEmail.bind(this.userService)
-  ])*/
-  propEmail: FormControl = new FormControl('eve.holt@reqres.in', {
+  ])
+  /*propEmail: FormControl = new FormControl('eve.holt@reqres.in', {
     validators: [Validators.required],
     asyncValidators: [this.userService.checkEmail.bind(this.userService)],
     updateOn: 'blur'
-  })
+  })*/
   propPass: FormControl = new FormControl()
   form: FormGroup = this.builder.group({
     email: this.propEmail,

@@ -5,7 +5,7 @@ import { Action } from "@ngrx/store";
 import { catchError, map, Observable, switchMap, tap } from "rxjs";
 import { NotificationService } from "src/app/core/services/notification.service";
 import { UserService } from "src/app/core/services/user.service";
-import { userCreate, userCreateSuccess, userGetAll, userGetAllSuccess } from "./user.action";
+import { userCreate, userCreateSuccess, userDelete, userDeleteSuccess, userGetAll, userGetAllSuccess } from "./user.action";
 
 @Injectable({
     providedIn: 'root'
@@ -25,6 +25,23 @@ export class UserEffect {
             switchMap(payload => this.userService.create(payload)),
             map(user => userCreateSuccess({ user })),
             tap(() => this.notification.success('Utilisateur créé')),
+            catchError((err: HttpErrorResponse) => {
+                this.notification.error('Erreur')
+                throw err
+            })
+        )
+    })
+
+    deleteUser$: Observable<Action> = createEffect(() => {
+        return this.actions$.pipe(
+            ofType(userDelete),
+            switchMap(({ id }) => {
+                return this.userService.delete(id)
+                    .pipe(
+                        map(() => userDeleteSuccess({ id })),
+                    )
+            }),
+            tap(() => this.notification.success('Utilisateur supprimé')),
             catchError((err: HttpErrorResponse) => {
                 this.notification.error('Erreur')
                 throw err

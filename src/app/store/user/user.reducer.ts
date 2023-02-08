@@ -1,6 +1,6 @@
 import { createReducer, on } from "@ngrx/store"
 import { User } from "src/app/core/interfaces/user"
-import { UserAction, userCreateSuccess, userGetAll, userGetAllSuccess } from "./user.action"
+import { UserAction, userCreateSuccess, userDeleteSuccess, userGetAll, userGetAllSuccess } from "./user.action"
 
 export interface UserState {
     users: User[],
@@ -45,6 +45,12 @@ export const userReducer = createReducer(
         return {
             ...state,
             users: [ ...state.users, action.user ]
+        }
+    }),
+    on(userDeleteSuccess, (state: UserState, action: { id: number }): UserState => {
+        return {
+            ...state,
+            users: state.users.filter(user => user.id !== action.id)
         }
     })
 )
