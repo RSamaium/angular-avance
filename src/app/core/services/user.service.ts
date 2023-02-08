@@ -13,8 +13,6 @@ type UserPayload = Omit<User, 'id'>
 export class UserService {
     readonly url: string = 'https://jsonplaceholder.typicode.com/users'
     private _search$: BehaviorSubject<string> = new BehaviorSubject('')
-    private _users$: BehaviorSubject<User[]> = new BehaviorSubject([] as User[])
-    readonly users$: Observable<User[]> = this._users$.asObservable()
     
     // readonly search$: Observable<string> = this._search$.asObservable()
     get search$(): Observable<string> {
@@ -30,45 +28,16 @@ export class UserService {
         private notification: NotificationService
     ) {}
 
-    getAll(): Observable<User[]> {
-        return this.http.get<User[]>(this.url)
-            .pipe(
-                tap((users) => {
-                    //const listUsers = this._users$.value
-                    this._users$.next(users)
-                })
-            )
+    getAll(sort?: string): Observable<User[]> {
+        return this.http.get<User[]>(this.url + (sort ? '?_sort=' + sort : ''))
     }
 
     create(payload: UserPayload): Observable<User> {
         return this.http.post<User>(this.url, payload)
-            .pipe(
-                tap((user) => {
-                    const users = this._users$.value
-                    this._users$.next([ ...users, user ])
-                    this.notification.success('Utilisateur créé !')
-                }),
-                catchError((err: HttpErrorResponse) => {
-                    this.notification.error('Erreur:' + err.message)
-                    throw err
-                    //return throwError(() => err)
-                })
-            )
     }
 
     delete(id: number): Observable<void> {
         return this.http.delete<void>(this.url + '/' + id)
-            .pipe(
-                tap(() => {
-                    const users = this._users$.value.filter(user => user.id !== id)
-                    this._users$.next(users)
-                    this.notification.success('Utilisateur supprimé !')
-                }),
-                catchError((err: HttpErrorResponse) => {
-                    this.notification.error('Erreur:' + err.message)
-                    throw err
-                })
-            )
     }
 
     /*checkEmail(input: AbstractControl): Observable<{ emailExists: boolean } | null> {
