@@ -4,7 +4,7 @@ import { Select, Store } from '@ngxs/store';
 import { Observable } from 'rxjs';
 import { User } from 'src/app/core/interfaces/user';
 import { UserService } from 'src/app/core/services/user.service';
-import { GetUsers } from 'src/app/store/user/user.action';
+import { CreateUser, DeleteUser, GetUsers } from 'src/app/store/user/user.action';
 import { UserState } from 'src/app/store/user/user.state';
 
 @Component({
@@ -12,7 +12,7 @@ import { UserState } from 'src/app/store/user/user.state';
   templateUrl: 'users.component.html'
 })
 export class UsersComponent implements OnInit {
-  @Select(UserState.getUserList) users$!: Observable<User[]> 
+  @Select(UserState.getUserList) users$!: Observable<User[]>
   color: string = ''
 
   constructor(
@@ -28,17 +28,10 @@ export class UsersComponent implements OnInit {
   }
 
   createUser(form: NgForm) {
-    this.userService.create(form.value).subscribe({
-      next: () => {
-        form.resetForm()
-      },
-      error: (err) => {
-        console.log(err)
-      }
-    })
+    this.store.dispatch(new CreateUser(form.value))
   }
 
   deleteUser(id: number) {
-    this.userService.delete(id).subscribe()
+    this.store.dispatch(new DeleteUser(id))
   }
 }
