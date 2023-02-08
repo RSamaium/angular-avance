@@ -21,7 +21,7 @@ export class LoginComponent {
   propEmail: FormControl = new FormControl('eve.holt@reqres.in', {
     validators: [Validators.required],
     asyncValidators: [this.userService.checkEmail.bind(this.userService)],
-    updateOn: 'blur'
+    updateOn: 'change'
   })
   propPass: FormControl = new FormControl()
   form: FormGroup = this.builder.group({

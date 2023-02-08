@@ -1,16 +1,27 @@
-import { AsyncSubject, BehaviorSubject, ReplaySubject, Subject } from 'rxjs'
+import { debounceTime, interval, map, switchMap, timer } from 'rxjs'
 
-const ob$ = new BehaviorSubject()
+const simulateKeypress = interval(100)
+const simulateHttp = timer(50)
+    .pipe(
+        map(() => Math.random())
+    )
 
-ob$.next('A')
-ob$.next('B')
-ob$.next('C')
+// Fonction  de validation
+function checkEmail() {
+    return timer(500)
+        .pipe(
+            switchMap(() => simulateHttp)
+        )
+        
+}
 
-const subscription = ob$.subscribe(console.log)
-
-ob$.next('D')
-
-subscription.unsubscribe()
-
-ob$.next('E')
-
+// moteur Angular
+let subscription
+simulateKeypress.subscribe(() => {
+    if (subscription) {
+        subscription.unsubscribe()
+    }
+    subscription = checkEmail().subscribe((validatorReturn) => {
+        console.log(validatorReturn)
+    })
+})

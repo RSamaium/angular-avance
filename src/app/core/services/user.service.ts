@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AbstractControl } from "@angular/forms";
-import { BehaviorSubject, catchError, lastValueFrom, map, Observable, retry, tap, throwError } from "rxjs";
+import { BehaviorSubject, catchError, debounceTime, lastValueFrom, map, Observable, retry, switchMap, tap, throwError, timer } from "rxjs";
 import { User } from "../interfaces/user";
 import { NotificationService } from "./notification.service";
 
@@ -40,20 +40,21 @@ export class UserService {
         return this.http.delete<void>(this.url + '/' + id)
     }
 
-    /*checkEmail(input: AbstractControl): Observable<{ emailExists: boolean } | null> {
-        return this.http.get<User>(this.url + '/1')
+    checkEmail(input: AbstractControl): Observable<{ emailExists: boolean } | null> {
+        return timer(500)
             .pipe(
+                switchMap(() => this.http.get<User>(this.url + '/1')),
                 map(user => user.email === input.value ? { emailExists: true } : null)
             )
-    }*/
+    }
 
     /*checkEmail(input: AbstractControl): Promise<{ emailExists: boolean } | null> {
         return lastValueFrom(this.http.get<User>(this.url + '/1'))
             .then(user => user.email === input.value ? { emailExists: true } : null)
     }*/
 
-    async checkEmail(input: AbstractControl): Promise<{ emailExists: boolean } | null> {
+    /*async checkEmail(input: AbstractControl): Promise<{ emailExists: boolean } | null> {
         const user = await lastValueFrom(this.http.get<User>(this.url + '/1'))
         return user.email === input.value ? { emailExists: true } : null
-    }
+    }*/
 }
