@@ -5,7 +5,7 @@ import { BehaviorSubject, catchError, lastValueFrom, map, Observable, retry, tap
 import { User } from "../interfaces/user";
 import { NotificationService } from "./notification.service";
 
-type UserPayload = Omit<User, 'id'>
+export type UserPayload = Omit<User, 'id'>
 
 @Injectable({
     providedIn: 'root'
