@@ -9,6 +9,8 @@ import { InterceptorService } from './core/services/interceptor.service';
 import { StoreModule } from '@ngrx/store';
 import { userReducer } from './store/user/user.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { UserEffect } from './store/user/user.effect';
 
 @NgModule({
   declarations: [
@@ -20,7 +22,8 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
     HttpClientModule,
     LoginComponent,
     StoreModule.forRoot({ user: userReducer }),
-    StoreDevtoolsModule.instrument()
+    StoreDevtoolsModule.instrument(),
+    EffectsModule.forRoot([ UserEffect ])
   ],
   providers: [{
     provide: HTTP_INTERCEPTORS,

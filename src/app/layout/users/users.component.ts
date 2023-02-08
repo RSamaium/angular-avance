@@ -25,7 +25,7 @@ export class UsersComponent implements OnInit {
     this.userService.search$.subscribe((str: string) => {
       console.log(str)
     })
-    this.store.dispatch(userGetAll())
+    this.store.dispatch(userGetAll({ sort: 'name' }))
   }
 
   createUser(form: NgForm) {

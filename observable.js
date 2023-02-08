@@ -1,16 +1,9 @@
-import { AsyncSubject, BehaviorSubject, ReplaySubject, Subject } from 'rxjs'
+import { AsyncSubject, BehaviorSubject, combineLatest, combineLatestWith, forkJoin, interval, map, merge, mergeMap, of, ReplaySubject, Subject, switchMap, timer, zip } from 'rxjs'
 
-const ob$ = new BehaviorSubject()
+const ob1$ = of(1, 2, 3)
+const ob2$ = of('A', 'B', 'C')
 
-ob$.next('A')
-ob$.next('B')
-ob$.next('C')
 
-const subscription = ob$.subscribe(console.log)
+const ob3$ = forkJoin([ ob1$, ob2$ ])
 
-ob$.next('D')
-
-subscription.unsubscribe()
-
-ob$.next('E')
-
+ob3$.subscribe(console.log)
